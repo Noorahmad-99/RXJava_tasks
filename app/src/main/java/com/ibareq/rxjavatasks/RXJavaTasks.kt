@@ -17,7 +17,8 @@ object RXJavaTasks {
      * let it emit characters form A to Z each 1 second
      */
     fun task1(): Observable<String> {
-        return Observable.
+        return Observable.just("A B C D E F G H I G K L M N O P Q R S T U V W X Y Z").zipWith(Observable.interval(1, TimeUnit.SECONDS),
+            {item, _ -> item.split(" ").toString() })
     }
 
     /**
@@ -26,7 +27,7 @@ object RXJavaTasks {
      */
     fun task2(): Observable<String> {
         val mList = listOf("A", "B", "C", "C", "D", "B", "E")
-        return Observable.fromIterable(mList)
+        return Observable.fromIterable(mList).distinct()
             .zipWith(Observable.interval(300, TimeUnit.MILLISECONDS), {item, _ -> item})
     }
 
@@ -37,7 +38,7 @@ object RXJavaTasks {
     fun task3(): Observable<String> {
         val firstObservable = Observable.just("A", "B", "C", "D", "E")
         val secondObservable = Observable.range(1,5)
-        return firstObservable.mergeWith(secondObservable)
+        return firstObservable.mergeWith(secondObservable .map { it.toString() } )
             .zipWith(Observable.interval(300, TimeUnit.MILLISECONDS), {item, _ -> item})
     }
 
@@ -46,7 +47,7 @@ object RXJavaTasks {
      * let it emit characters form A to Z each 1 second
      */
     fun task4(): Observable<Int> {
-        return Observable.range(1,100)
+        return Observable.range(1,100).skip(20).take(60)
             .zipWith(Observable.interval(300, TimeUnit.MILLISECONDS), {item, _ -> item})
     }
 
@@ -57,7 +58,7 @@ object RXJavaTasks {
         val firstObservable = Observable.just("A", "B", "C", "D", "E").zipWith(Observable.interval(300, TimeUnit.MILLISECONDS), {item, _ -> item})
         val secondObservable = Observable.range(1,5).zipWith(Observable.interval(300, TimeUnit.MILLISECONDS), {item, _ -> item})
 
-        return Observable.
+        return Observable.zip(firstObservable,secondObservable ,{ letter, number -> "$letter$number" })
     }
 
 }
